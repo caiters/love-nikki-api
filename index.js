@@ -105,6 +105,7 @@ app.get("/clothes", function(req, res) {
       return _.groupBy(clothes, "id");
     })
     .then(function(clothes) {
+      // TODO: have to fix this now that category id is being figured into each thing
       return _.mapValues(clothes, function(dupeClothes) {
         let styles = _.map(dupeClothes, function(clothing) {
           return { style: clothing.style, rating: clothing.rating };
