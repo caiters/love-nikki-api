@@ -8,7 +8,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "build": "gulp",
-    "postinstall": "gulp"
+    "postinstall": "gulp build"
   },
   "author": "",
   "license": "ISC",

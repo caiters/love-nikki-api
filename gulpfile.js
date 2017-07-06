@@ -59,3 +59,5 @@ gulp.task("default", [
   "watch:css",
   "watch:scripts"
 ]);
+
+gulp.task("build", ["css", "scripts"]);
