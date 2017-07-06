@@ -102,10 +102,11 @@ app.get("/clothes", function(req, res) {
       "clothes.category": "customizations.clothingCategory"
     })
     .then(function(clothes) {
-      return _.groupBy(clothes, "id");
+      return _.groupBy(clothes, function(clothing) {
+        return clothing.id + "-" + clothing.category;
+      });
     })
     .then(function(clothes) {
-      // TODO: have to fix this now that category id is being figured into each thing
       return _.mapValues(clothes, function(dupeClothes) {
         let styles = _.map(dupeClothes, function(clothing) {
           return { style: clothing.style, rating: clothing.rating };
@@ -159,7 +160,8 @@ app.put("/clothes/:category/:id", function(req, res, next) {
   return db
     .transaction(function(tx) {
       return upsertItem(tx, "clothes", clothing, {
-        id: clothing.id
+        id: clothing.id,
+        category: clothing.category
       }).then(function(data) {
         let promises = [];
         if (tags) {
