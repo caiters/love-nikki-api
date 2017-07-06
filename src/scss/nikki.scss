@@ -1,0 +1,16 @@
+@import 'partials/variables';
+@import 'partials/base';
+@import 'partials/form';
+
+.style { padding: 2px; border-radius: 2px;
+  &--gorgeous { background-color: $gorgeous; }
+  &--simple { background-color: $simple; }
+  &--elegance { background-color: $elegance; }
+  &--lively { background-color: $lively; }
+  &--mature { background-color: $mature; }
+  &--cute { background-color: $cute; }
+  &--sexy { background-color: $sexy; }
+  &--pure { background-color: $pure; }
+  &--warm { background-color: $warm; }
+  &--cool { background-color: $cool; }
+}

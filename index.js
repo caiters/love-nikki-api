@@ -13,10 +13,6 @@ app.use(bodyParser.json());
 
 app.use(cors());
 
-app.get("/", function(req, res) {
-  return res.send("hello world");
-});
-
 function buildCategoryTree(categories, children, categoriesByName) {
   return _.map(categories, function(category) {
     let c = {
@@ -237,6 +233,12 @@ app.put("/clothes/:category/:id", function(req, res, next) {
       return res.json(req.body);
     })
     .catch(next);
+});
+
+app.use(express.static("public"));
+
+app.get("/*", function(req, res) {
+  res.sendFile(__dirname + "/public/index.html");
 });
 
 app.use(function(err, req, res, next) {
