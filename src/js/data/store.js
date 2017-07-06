@@ -86,14 +86,14 @@ var store = new Vuex.Store({
   actions: {
     load: function(context) {
       context.commit("loading");
-      let categories = fetch("http://localhost:3000/categories")
+      let categories = fetch("/api/categories")
         .then(function(res) {
           return res.json();
         })
         .then(function(categories) {
           context.commit("setCategories", categories);
         });
-      let clothes = fetch("http://localhost:3000/clothes")
+      let clothes = fetch("/api/clothes")
         .then(function(res) {
           return res.json();
         })
@@ -107,10 +107,7 @@ var store = new Vuex.Store({
     addClothingItem: function(context, clothingItem) {
       context.commit("loading");
       return fetch(
-        "http://localhost:3000/clothes/" +
-          clothingItem.category +
-          "/" +
-          clothingItem.id,
+        "/api/clothes/" + clothingItem.category + "/" + clothingItem.id,
         {
           method: "put",
           headers: new Headers({ "Content-Type": "application/JSON" }),

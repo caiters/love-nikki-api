@@ -34,7 +34,7 @@ function buildCategoryTree(categories, children, categoriesByName) {
   });
 }
 
-app.get("/categories", function(req, res) {
+app.get("/api/categories", function(req, res) {
   return db.select().from("categories").then(function(categories) {
     let children = {};
     _.forEach(categories, function(category) {
@@ -62,7 +62,7 @@ app.get("/categories", function(req, res) {
   });
 });
 
-app.post("/categories", function(req, res, next) {
+app.post("/api/categories", function(req, res, next) {
   return db("categories")
     .insert(req.body)
     .then(function(data) {
@@ -71,7 +71,7 @@ app.post("/categories", function(req, res, next) {
     .catch(next);
 });
 
-app.get("/clothes", function(req, res) {
+app.get("/api/clothes", function(req, res) {
   return db
     .select(
       "clothes.id",
@@ -145,7 +145,7 @@ function upsertItem(db, table, item, where) {
   });
 }
 
-app.put("/clothes/:category/:id", function(req, res, next) {
+app.put("/api/clothes/:category/:id", function(req, res, next) {
   req.body.id = req.params.id;
   req.body.category = req.params.category;
   let clothing = Object.assign({}, req.body);
