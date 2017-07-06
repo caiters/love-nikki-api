@@ -111,8 +111,8 @@ app.get("/clothes", function(req, res) {
         let styles = _.map(dupeClothes, function(clothing) {
           return { style: clothing.style, rating: clothing.rating };
         });
-        let tags = _.map(dupeClothes, "tag");
-        let customizations = _.map(dupeClothes, "customizations");
+        let tags = _.compact(_.map(dupeClothes, "tag"));
+        let customizations = _.compact(_.map(dupeClothes, "customizations"));
         let clothing = dupeClothes[0];
         delete clothing.tag;
         delete clothing.rating;
@@ -120,7 +120,9 @@ app.get("/clothes", function(req, res) {
         clothing.style = _.reduce(
           styles,
           function(styles, style) {
-            styles[style.style] = style.rating;
+            if (style.rating) {
+              styles[style.style] = style.rating;
+            }
             return styles;
           },
           {}
