@@ -52,12 +52,6 @@ gulp.task("watch:scripts", ["scripts"], function() {
   gulp.watch([paths.js, paths.jsParts, paths.jsVendor], ["scripts"]);
 });
 
-gulp.task("default", [
-  "connect",
-  "css",
-  "scripts",
-  "watch:css",
-  "watch:scripts"
-]);
+gulp.task("default", ["css", "scripts", "watch:css", "watch:scripts"]);
 
 gulp.task("build", ["css", "scripts"]);

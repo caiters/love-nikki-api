@@ -1,7 +1,17 @@
 Vue.use(VeeValidate);
 
+var routes = [
+  { path: "/", component: clothingTable }
+  //{ path: "/add-clothing", component: clothingForm }
+];
+
+var router = new VueRouter({
+  routes: routes
+});
+
 var app = new Vue({
   el: "#nikki",
+  router: router,
   data: {
     finished: false,
     clothingFormData: {
@@ -93,6 +103,5 @@ var app = new Vue({
       this.updateStyleArray(emptyData.clothingStyles);
     }
   }
-});
-
+}).$mount("#nikki");
 app.$validator.updateDictionary(customValidationMsgs);
