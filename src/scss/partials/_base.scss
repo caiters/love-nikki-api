@@ -16,3 +16,31 @@ html,body { font-family: arial, sans-serif; }
   clip: rect(0,0,0,0);
   border: 0;
 }
+
+.clothing-table {
+  &__table { width: 100%; }
+  td { padding: 0.5rem; }
+}
+
+.style { padding: 2px; border-radius: 2px;
+  &--gorgeous { background-color: $gorgeous; }
+  &--simple { background-color: $simple; }
+  &--elegance { background-color: $elegance; }
+  &--lively { background-color: $lively; }
+  &--mature { background-color: $mature; }
+  &--cute { background-color: $cute; }
+  &--sexy { background-color: $sexy; }
+  &--pure { background-color: $pure; }
+  &--warm { background-color: $warm; }
+  &--cool { background-color: $cool; }
+}
+.style-list {
+  list-style: none outside; margin: 0; padding: 0;
+  &__item { display: inline-block; }
+}
+
+.tags-list { list-style: none outside; margin: 0; padding: 0;
+  &__item {display: inline-block; }
+}
+
+.tag { border: 1px solid #000; padding: 2px; border-radius: 2px; }
