@@ -1,8 +1,8 @@
 Vue.use(VeeValidate);
 
 var routes = [
-  { path: "/", component: clothingTable }
-  //{ path: "/add-clothing", component: clothingForm }
+  { path: "/", component: clothingTable },
+  { path: "/add-clothing", component: clothingForm }
 ];
 
 var router = new VueRouter({
@@ -12,20 +12,6 @@ var router = new VueRouter({
 var app = new Vue({
   el: "#nikki",
   router: router,
-  data: {
-    finished: false,
-    clothingFormData: {
-      id: "",
-      category: "",
-      name: "",
-      hearts: 0,
-      clothingStyles: [],
-      ratings: {},
-      tags: [],
-      customizable: false,
-      customizableItems: []
-    }
-  },
   mounted: function() {
     store.dispatch("load");
   },
