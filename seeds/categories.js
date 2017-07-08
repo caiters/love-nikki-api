@@ -39,7 +39,8 @@ exports.seed = function(knex, Promise) {
       { name: "Background", parent: "Special" },
       { name: "Head ornaments", parent: "Special" },
       { name: "Ground", parent: "Special" },
-      { name: "Skin", parent: "Special" }
+      { name: "Skin", parent: "Special" },
+      { name: "Makeup" }
     ]);
   });
 };
