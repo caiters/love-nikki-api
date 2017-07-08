@@ -48,6 +48,22 @@ Vue.component("category-select", {
       return newCategories;
     }
   },
+  created: function() {
+    var form = this;
+    bus.$emit("componentValidateable", "category select");
+    bus.$on("validateForm", function() {
+      form.$validator.validateAll().then(function(result) {
+        if (result) {
+          bus.$emit("componentOK");
+        } else {
+          bus.$emit("componentError", form.$validator.errorBag.errors);
+        }
+      });
+    });
+    bus.$on("FormSubmitted", function() {
+      form.chosenCategory = "";
+    });
+  },
   methods: {
     categoryChosen: function() {
       this.$emit("change", this.chosenCategory);

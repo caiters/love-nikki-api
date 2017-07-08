@@ -10,9 +10,9 @@ Vue.component("customization", {
       <input type="radio" v-model="customizable" required name="customizable" @change="toggleCustomizable" id="customizableNo" :value="false" :checked="customizable" /> <label for="customizableNo">No</label>
     </div>
     <div v-if="customizable">
-      <div v-for="(item, index) in customizableItems">
+      <div v-for="(item, index) in customizableItems" class="form-group" :class="{'form-group--error': errors.has('itemNumber'+index)}">
         <label :for="'itemNumber'+index">Item ID</label>
-        <input type="text" :name="'itemNumber'+index" :id="'itemNumber'+index" v-model="item.id" @blur="addedCustomizableItem()" placeholder="e.g. 001" /> <button type="button" @click="removeCustomizableItem(item)">x</button>
+        <input type="text" v-validate="'required'" :name="'itemNumber'+index" :id="'itemNumber'+index" v-model="item.id" @blur="addedCustomizableItem()" placeholder="e.g. 001" /> <button type="button" @click="removeCustomizableItem(item)">x</button> <span class="form-group__error" v-if="errors.has('itemNumber'+index)">{{errors.first('itemNumber'+index)}}</span>
       </div>
       <button type="button" @click="addCustomizableItem">Add another customizable item?</button>
     </div>
@@ -23,6 +23,26 @@ Vue.component("customization", {
       customizable: false,
       customizableItems: [{ id: "" }]
     };
+  },
+  created: function() {
+    var form = this;
+    bus.$emit("componentValidateable", "customization");
+    bus.$on(
+      "validateForm",
+      function() {
+        form.$validator.validateAll().then(function(result) {
+          if (result) {
+            bus.$emit("componentOK");
+          } else {
+            bus.$emit("componentError", form.$validator.errorBag.errors);
+          }
+        });
+      }.bind(this)
+    );
+    bus.$on("FormSubmitted", function() {
+      form.customizable = false;
+      form.customizableItems = [{ id: "" }];
+    });
   },
   methods: {
     addCustomizableItem: function(value) {

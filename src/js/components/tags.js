@@ -13,6 +13,12 @@ Vue.component("tags", {
       selectedTags: this.currentTags
     };
   },
+  created: function() {
+    var form = this;
+    bus.$on("FormSubmitted", function() {
+      form.selectedTags = [];
+    });
+  },
   methods: {
     addedTag: function() {
       this.$emit("change", this.selectedTags);

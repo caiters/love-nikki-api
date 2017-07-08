@@ -45,6 +45,27 @@ var customValidationMsgs = {
       ratingWarm: {
         regex: letterGrade,
         required: letterGrade
+      },
+      itemNumber0: {
+        required: "Please either fill out or remove this field."
+      },
+      itemNumber1: {
+        required: "Please either fill out or remove this field."
+      },
+      itemNumber2: {
+        required: "Please either fill out or remove this field."
+      },
+      itemNumber3: {
+        required: "Please either fill out or remove this field."
+      },
+      itemNumber4: {
+        required: "Please either fill out or remove this field."
+      },
+      itemNumber5: {
+        required: "Please either fill out or remove this field."
+      },
+      itemNumber6: {
+        required: "Please either fill out or remove this field."
       }
     }
   }

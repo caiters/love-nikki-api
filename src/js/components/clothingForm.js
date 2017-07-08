@@ -63,11 +63,34 @@ var clothingForm = Vue.component("clothing-form", {
         tags: [],
         customizable: false,
         customizableItems: []
-      }
+      },
+      componentsToValidate: 0,
+      componentsOK: 0,
+      componentsErrored: 0
     };
   },
   mounted: function() {
+    bus.$emit("componentValidateable", "main form");
+  },
+  created: function() {
     store.dispatch("load");
+
+    var form = this;
+
+    bus.$on("componentValidateable", function(name) {
+      form.componentsToValidate++;
+    });
+
+    bus.$on("componentOK", function() {
+      form.componentsOK++;
+      if (form.componentsToValidate === form.componentsOK) {
+        form.submitForm();
+      }
+    });
+
+    bus.$on("componentError", function() {
+      form.componentsErrored++;
+    });
   },
   computed: {
     categories: function() {
@@ -134,6 +157,7 @@ var clothingForm = Vue.component("clothing-form", {
         customizableItems: []
       };
       this.clothingFormData = emptyData;
+      bus.$emit("FormSubmitted");
       this.updateCustomItems(emptyData.customizableItems);
       this.updateRatings(emptyData.ratings);
       this.updateTags(emptyData.tags);
@@ -142,13 +166,21 @@ var clothingForm = Vue.component("clothing-form", {
       this.updateStyleArray(emptyData.clothingStyles);
     },
     validateBeforeSubmit: function() {
-      var clothingForm = this;
-      this.$validator.validateAll().then(function(result) {
+      var form = this;
+      form.componentsOK = 0;
+      form.componentsErrored = 0;
+      bus.$emit("validateForm");
+      form.$validator.validateAll().then(function(result) {
         if (result) {
-          return clothingForm.submitClothing();
+          bus.$emit("componentOK");
+        } else {
+          bus.$emit("componentError", form.$validator.errorBag.errors);
         }
-        alert("Please fix errors");
       });
+    },
+    submitForm: function() {
+      console.log("SUBMITTING FORM");
+      return this.submitClothing();
     }
   }
 });

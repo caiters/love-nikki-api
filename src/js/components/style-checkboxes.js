@@ -2,8 +2,8 @@ Vue.component("style-checkboxes", {
   template: `
   <fieldset class="style-form__checkbox-wrapper">
     <legend class="style-form__checkbox-title">Select styles</legend>
-    <p class="form-group__error" v-if="!errors.has('selectedStylesNum') && (fields.selectedStylesNum && !fields.selectedStylesNum.valid)">Please select 5 styles.</p>
-    <p class="form-group__error" v-if="errors.has('selectedStylesNum')">{{errors.first('selectedStylesNum')}}</p>
+    <p class="form-group__error" v-if="(!errors.has('selectedStylesNum') && (fields.selectedStylesNum && !fields.selectedStylesNum.valid)) || !componentValidated">Please select 5 styles.</p>
+    <p class="form-group__error" style="color:red" v-if="errors.has('selectedStylesNum') && componentValidated">{{errors.first('selectedStylesNum')}}</p>
     <p class="form-group__message" v-if="fields.selectedStylesNum && fields.selectedStylesNum.valid">5 styles selected.</p>
     <div v-for="style in styles" class="style-form__checkbox-container">
       <input :disabled="shouldBeDisabled(style)" @change="checkedItem(selectedStyles)" v-model="selectedStyles" type="checkbox" :value="style" :name="style" :id="'selectStyles' + style" />
@@ -16,8 +16,27 @@ Vue.component("style-checkboxes", {
   props: ["styles", "currentStyles", "error"],
   data: function() {
     return {
-      selectedStyles: this.currentStyles
+      selectedStyles: this.currentStyles,
+      componentValidated: false
     };
+  },
+  created: function() {
+    var form = this;
+    bus.$emit("componentValidateable", "style checkboxes");
+    bus.$on("validateForm", function() {
+      form.$validator.validateAll().then(function(result) {
+        form.componentValidated = true;
+        if (result) {
+          bus.$emit("componentOK");
+        } else {
+          bus.$emit("componentError", form.$validator.errorBag.errors);
+        }
+      });
+    });
+    bus.$on("FormSubmitted", function() {
+      form.selectedStyles = [];
+      form.componentValidated = false;
+    });
   },
   methods: {
     checkedItem: function(styles) {

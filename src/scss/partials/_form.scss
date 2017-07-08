@@ -2,6 +2,7 @@
   &__label { display: block;
     &--heart { cursor: pointer; padding: 0.5rem;
       &:hover { color: pink; }
+      .form-group--error & { color: #000; }
     }
   }
   &__heart-list { list-style: none outside; margin: 0; padding: 0;
