@@ -57,7 +57,7 @@ var clothingForm = Vue.component("clothing-form", {
         id: "",
         category: "",
         name: "",
-        hearts: 0,
+        hearts: null,
         clothingStyles: [],
         ratings: {},
         tags: [],
