@@ -25,12 +25,13 @@ function parseCategories(category, newCategories, prefix) {
 
 Vue.component("category-select", {
   template: `
-  <div class="form-group">
+  <div class="form-group" :class="{'form-group--error': errors.has('category')}">
     <label class="form-group__label" for="category">Category</label>
-    <select id="category" @change="categoryChosen" v-model="chosenCategory">
+    <select name="category" id="category" @change="categoryChosen" v-model="chosenCategory" v-validate="'required'">
       <option></option>
       <category v-for="category in arrayOfCategories" :item="category"></category>
     </select>
+    <span class="form-group__error" v-if="errors.has('category')">{{errors.first('category')}}</span>
   </div>
   `,
   props: ["categories", "currentCategory"],

@@ -15,7 +15,6 @@ Vue.component("tags", {
   },
   methods: {
     addedTag: function() {
-      console.log(this.selectedTags);
       this.$emit("change", this.selectedTags);
     }
   }

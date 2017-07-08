@@ -1,5 +1,3 @@
-Vue.use(VeeValidate);
-
 var routes = [
   { path: "/", component: clothingTable },
   { path: "/add-clothing", component: clothingForm }

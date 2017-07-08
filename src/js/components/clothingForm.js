@@ -1,20 +1,23 @@
+Vue.use(VeeValidate);
 var clothingForm = Vue.component("clothing-form", {
-  template: `<form id="submitNewClothing" class="clothing-form" @submit.prevent="validateBeforeSubmit">
+  template: `<form id="submitNewClothing" class="clothing-form" @submit.prevent="validateBeforeSubmit" novalidate="novalidate">
   <h1 class="clothing-form__heading">Add New Clothing</h1>
-  <div class="form-group">
+  <div class="form-group" :class="{'form-group--error': errors.has('clothingID')}">
     <label class="form-group__label" for="clothingID">Clothing ID #</label>
-    <input class="form-group__input" required type="text" v-model="clothingFormData.id" placeholder="e.g. 001" />
+    <input class="form-group__input" name="clothingID" id="clothingID" type="text" v-model="clothingFormData.id" v-validate="'required|min:3|numeric'" placeholder="e.g. 001" />
+    <span class="form-group__error" v-if="errors.has('clothingID')">{{errors.first('clothingID')}}</span>
   </div>
-  <div class="form-group">
+  <div class="form-group" :class="{'form-group--error': errors.has('name')}">
     <label class="form-group__label" for="name">Name</label>
-    <input class="form-group__input" required type="text" v-model="clothingFormData.name" placeholder="e.g. Nikki's Pinky" />
+    <input class="form-group__input" required type="text" name="name" id="name" v-validate="'required'" v-model="clothingFormData.name" placeholder="e.g. Nikki's Pinky" />
+    <span class="form-group__error" v-if="errors.has('name')">{{errors.first('name')}}</span>
   </div>
   <category-select :categories="categories" :current-category="clothingFormData.category" @change="updateCategory"></category-select>
-  <div class="form-group group">
+  <div class="form-group group" :class="{'form-group--error': errors.has('hearts')}">
     <label class="form-group__label" for="hearts">Hearts</label>
     <ul :class="fullHearts ? 'form-group__heart-list form-group__heart-list--full group' : 'form-group__heart-list group'">
       <li :class="selectedHeartsClass(1)">
-        <input required class="form-group__heart-input" type="radio" name="hearts" v-model.number="clothingFormData.hearts" id="hearts1" value="1" />
+        <input v-validate="'required'" class="form-group__heart-input" type="radio" name="hearts" v-model.number="clothingFormData.hearts" id="hearts1" value="1" />
         <label for="hearts1" class="form-group__label--heart"><span class="sr-only">1</span>&hearts;</label>
       </li>
       <li :class="selectedHeartsClass(2)">
@@ -38,6 +41,7 @@ var clothingForm = Vue.component("clothing-form", {
         <label for="hearts6" class="form-group__label--heart"><span class="sr-only">6</span>&hearts;</label>
       </li>
     </ul>
+    <span class="form-group__error" v-if="errors.has('hearts')">{{errors.first('hearts')}}</span>
   </div>
   <style-checkboxes :styles="orderedStyles" :current-styles="clothingFormData.clothingStyles" @change="updateStyleArray"></style-checkboxes>
   <style-ratings :styles="clothingFormData.clothingStyles" :current-ratings="clothingFormData.ratings" @change="updateRatings"></style-ratings>
@@ -92,14 +96,6 @@ var clothingForm = Vue.component("clothing-form", {
     }
   },
   methods: {
-    validateBeforeSubmit: function() {
-      this.$validator.validateAll().then(function(result) {
-        if (result) {
-          this.submitClothing();
-        }
-        alert("Please fix errors");
-      });
-    },
     updateStyleArray: function(value) {
       this.clothingFormData.clothingStyles = value;
     },
@@ -143,6 +139,15 @@ var clothingForm = Vue.component("clothing-form", {
       this.updateCustomizable(emptyData.customizable);
       this.updateCategory(emptyData.category);
       this.updateStyleArray(emptyData.clothingStyles);
+    },
+    validateBeforeSubmit: function() {
+      var myThis = this;
+      this.$validator.validateAll().then(function(result) {
+        if (result) {
+          return myThis.submitClothing();
+        }
+        alert("Please fix errors");
+      });
     }
   }
 });
