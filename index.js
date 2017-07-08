@@ -145,6 +145,46 @@ function upsertItem(db, table, item, where) {
   });
 }
 
+app.del("/api/clothes/:category/:id", function(req, res, next) {
+  Promise.map(
+    [
+      db("tags")
+        .where({
+          clothingId: req.params.id,
+          clothingCategory: req.params.category
+        })
+        .del(),
+      db("styles")
+        .where({
+          clothingId: req.params.id,
+          clothingCategory: req.params.category
+        })
+        .del(),
+      db("customizations")
+        .where({
+          clothingId: req.params.id,
+          clothingCategory: req.params.category
+        })
+        .del()
+    ],
+    function() {
+      return db("clothes")
+        .where({
+          id: req.params.id,
+          category: req.params.category
+        })
+        .del();
+    }
+  )
+    .then(function() {
+      return res.json({
+        id: req.params.id,
+        category: req.params.category
+      });
+    })
+    .catch(next);
+});
+
 app.put("/api/clothes/:category/:id", function(req, res, next) {
   req.body.id = req.params.id;
   req.body.category = req.params.category;

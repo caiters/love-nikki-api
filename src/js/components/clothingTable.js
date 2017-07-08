@@ -16,6 +16,7 @@ var clothingTable = Vue.component("clothing-table", {
           <th>Tags</th>
           <th>Customizable?</th>
           <th>Customizes to...</th>
+          <th>Delete?</th>
         </tr>
       </thead>
       <tbody>
@@ -40,6 +41,9 @@ var clothingTable = Vue.component("clothing-table", {
           </td>
           <td valign="top">{{clothing.customizable}}</td>
           <td valign="top"><span v-for="(customization, index) in clothing.customizations">{{customization}}, </span></td>
+          <td valign="top">
+            <button type="button" @click="deleteClothing(clothing.category, clothing.id)">Delete</button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -106,7 +110,6 @@ var clothingTable = Vue.component("clothing-table", {
         });
         return clothes;
       }
-      console.log("and now we return clothes");
       return clothes;
     },
     updateCategory: function(chosenCategory) {
@@ -114,6 +117,9 @@ var clothingTable = Vue.component("clothing-table", {
     },
     updateStyleArray: function(chosenStyles) {
       this.selectedStyles = chosenStyles;
+    },
+    deleteClothing: function(category, id) {
+      store.dispatch("deleteClothingItem", { category: category, id: id });
     },
     updateTags: function(chosenTags) {
       console.log(chosenTags, "chosen tags");

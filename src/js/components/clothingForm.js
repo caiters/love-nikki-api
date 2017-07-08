@@ -179,7 +179,6 @@ var clothingForm = Vue.component("clothing-form", {
       });
     },
     submitForm: function() {
-      console.log("SUBMITTING FORM");
       return this.submitClothing();
     }
   }

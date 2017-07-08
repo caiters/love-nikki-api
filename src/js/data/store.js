@@ -66,6 +66,10 @@ var store = new Vuex.Store({
     add: function(state, newItems) {
       return Object.assign(state, newItems);
     },
+    delete: function(state, clothingItem) {
+      Vue.delete(state.clothes, clothingItem.id + "-" + clothingItem.category);
+      return state;
+    },
     loading: function(state) {
       return Object.assign(state, { loading: true });
     },
@@ -101,6 +105,18 @@ var store = new Vuex.Store({
           context.commit("setClothes", clothes);
         });
       return Promise.all([categories, clothes]).then(function() {
+        context.commit("doneLoading");
+      });
+    },
+    deleteClothingItem: function(context, clothingItem) {
+      context.commit("loading");
+      return fetch(
+        "/api/clothes/" + clothingItem.category + "/" + clothingItem.id,
+        {
+          method: "delete"
+        }
+      ).then(function() {
+        context.commit("delete", clothingItem);
         context.commit("doneLoading");
       });
     },
