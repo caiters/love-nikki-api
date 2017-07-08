@@ -17,37 +17,38 @@ var clothingForm = Vue.component("clothing-form", {
     <label class="form-group__label" for="hearts">Hearts</label>
     <ul :class="fullHearts ? 'form-group__heart-list form-group__heart-list--full group' : 'form-group__heart-list group'">
       <li :class="selectedHeartsClass(1)">
-        <input v-validate="'required'" class="form-group__heart-input" type="radio" name="hearts" v-model.number="clothingFormData.hearts" id="hearts1" value="1" />
+        <input v-validate="'required'" class="form-group__heart-input" type="radio" name="hearts" v-model.number="clothingFormData.hearts" id="hearts1" :value="1" />
         <label for="hearts1" class="form-group__label--heart"><span class="sr-only">1</span>&hearts;</label>
       </li>
       <li :class="selectedHeartsClass(2)">
-        <input required class="form-group__heart-input" type="radio" name="hearts" v-model.number="clothingFormData.hearts" id="hearts2" value="2" />
+        <input class="form-group__heart-input" type="radio" name="hearts" v-model.number="clothingFormData.hearts" id="hearts2" :value="2" />
         <label for="hearts2" class="form-group__label--heart"><span class="sr-only">2</span>&hearts;</label>
       </li>
       <li :class="selectedHeartsClass(3)">
-        <input required class="form-group__heart-input" type="radio" name="hearts" v-model.number="clothingFormData.hearts" id="hearts3" value="3" />
+        <input class="form-group__heart-input" type="radio" name="hearts" v-model.number="clothingFormData.hearts" id="hearts3" :value="3" />
         <label for="hearts3" class="form-group__label--heart"><span class="sr-only">3</span>&hearts;</label>
       </li>
       <li :class="selectedHeartsClass(4)">
-        <input required class="form-group__heart-input" type="radio" name="hearts" v-model.number="clothingFormData.hearts" id="hearts4" value="4" />
+        <input class="form-group__heart-input" type="radio" name="hearts" v-model.number="clothingFormData.hearts" id="hearts4" :value="4" />
         <label for="hearts4" class="form-group__label--heart"><span class="sr-only">4</span>&hearts;</label>
       </li>
       <li :class="selectedHeartsClass(5)">
-        <input required class="form-group__heart-input" type="radio" name="hearts" v-model.number="clothingFormData.hearts" id="hearts5" value="5" />
+        <input class="form-group__heart-input" type="radio" name="hearts" v-model.number="clothingFormData.hearts" id="hearts5" :value="5" />
         <label for="hearts5" class="form-group__label--heart"><span class="sr-only">5</span>&hearts;</label>
       </li>
       <li :class="selectedHeartsClass(6)">
-        <input required class="form-group__heart-input" type="radio" name="hearts" v-model.number="clothingFormData.hearts" id="hearts6" value="6" />
+        <input class="form-group__heart-input" type="radio" name="hearts" v-model.number="clothingFormData.hearts" id="hearts6" :value="6" />
         <label for="hearts6" class="form-group__label--heart"><span class="sr-only">6</span>&hearts;</label>
       </li>
     </ul>
+
     <span class="form-group__error" v-if="errors.has('hearts')">{{errors.first('hearts')}}</span>
   </div>
   <style-checkboxes :styles="orderedStyles" :current-styles="clothingFormData.clothingStyles" @change="updateStyleArray"></style-checkboxes>
   <style-ratings :styles="clothingFormData.clothingStyles" :current-ratings="clothingFormData.ratings" @change="updateRatings"></style-ratings>
   <tags :tags="orderedTags" @change="updateTags" :current-tags="clothingFormData.tags"></tags>
   <customization @change="updateCustomItems" @toggled="updateCustomizable"></customization>
-  <button type="submit" @submit="submitClothing($event)">Submit Clothing</button>
+  <button type="submit">Submit Clothing</button>
 </form>`,
   data: function() {
     return {
@@ -141,10 +142,10 @@ var clothingForm = Vue.component("clothing-form", {
       this.updateStyleArray(emptyData.clothingStyles);
     },
     validateBeforeSubmit: function() {
-      var myThis = this;
+      var clothingForm = this;
       this.$validator.validateAll().then(function(result) {
         if (result) {
-          return myThis.submitClothing();
+          return clothingForm.submitClothing();
         }
         alert("Please fix errors");
       });
