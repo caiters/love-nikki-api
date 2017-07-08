@@ -1,5 +1,5 @@
 var clothingForm = Vue.component("clothing-form", {
-  template: `<form id="submitNewClothing" class="clothing-form">
+  template: `<form id="submitNewClothing" class="clothing-form" @submit.prevent="validateBeforeSubmit">
   <h1 class="clothing-form__heading">Add New Clothing</h1>
   <div class="form-group">
     <label class="form-group__label" for="clothingID">Clothing ID #</label>
@@ -12,7 +12,7 @@ var clothingForm = Vue.component("clothing-form", {
   <category-select :categories="categories" :current-category="clothingFormData.category" @change="updateCategory"></category-select>
   <div class="form-group group">
     <label class="form-group__label" for="hearts">Hearts</label>
-    <ul :class="fullHearts ? 'form-group__heart-list form-group__heart-list--full' : 'form-group__heart-list'">
+    <ul :class="fullHearts ? 'form-group__heart-list form-group__heart-list--full group' : 'form-group__heart-list group'">
       <li :class="selectedHeartsClass(1)">
         <input required class="form-group__heart-input" type="radio" name="hearts" v-model.number="clothingFormData.hearts" id="hearts1" value="1" />
         <label for="hearts1" class="form-group__label--heart"><span class="sr-only">1</span>&hearts;</label>
@@ -43,7 +43,7 @@ var clothingForm = Vue.component("clothing-form", {
   <style-ratings :styles="clothingFormData.clothingStyles" :current-ratings="clothingFormData.ratings" @change="updateRatings"></style-ratings>
   <tags :tags="orderedTags" @change="updateTags" :current-tags="clothingFormData.tags"></tags>
   <customization @change="updateCustomItems" @toggled="updateCustomizable"></customization>
-  <button type="submit" @click="submitClothing($event)">Submit Clothing</button>
+  <button type="submit" @submit="submitClothing($event)">Submit Clothing</button>
 </form>`,
   data: function() {
     return {
@@ -92,6 +92,14 @@ var clothingForm = Vue.component("clothing-form", {
     }
   },
   methods: {
+    validateBeforeSubmit: function() {
+      this.$validator.validateAll().then(function(result) {
+        if (result) {
+          this.submitClothing();
+        }
+        alert("Please fix errors");
+      });
+    },
     updateStyleArray: function(value) {
       this.clothingFormData.clothingStyles = value;
     },
@@ -116,7 +124,6 @@ var clothingForm = Vue.component("clothing-form", {
       this.clothingFormData.category = category;
     },
     submitClothing: function(e) {
-      e.preventDefault();
       store.dispatch("addClothingItem", this.reformatObject);
       var emptyData = {
         id: "",

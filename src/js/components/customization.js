@@ -12,7 +12,8 @@ Vue.component("customization", {
     <div v-if="customizable">
       <div v-for="(item, index) in customizableItems">
         <label :for="'itemNumber'+index">Item ID</label>
-        <input type="text" :name="'itemNumber'+index" :id="'itemNumber'+index" v-model="item.id" @blur="addedCustomizableItem()" placeholder="e.g. 001" />
+        {{item}}
+        <input type="text" :name="'itemNumber'+index" :id="'itemNumber'+index" v-model="item.id" @blur="addedCustomizableItem()" placeholder="e.g. 001" /> <button type="button" @click="removeCustomizableItem(item)">x</button>
       </div>
       <button type="button" @click="addCustomizableItem">Add another customizable item?</button>
     </div>
@@ -27,6 +28,9 @@ Vue.component("customization", {
   methods: {
     addCustomizableItem: function(value) {
       this.customizableItems.push({ id: "" });
+    },
+    removeCustomizableItem: function(itemId) {
+      this.customizableItems.splice(this.customizableItems.indexOf(itemId), 1);
     },
     addedCustomizableItem: function(customizableItems) {
       this.$emit("change", this.customizableItems);
