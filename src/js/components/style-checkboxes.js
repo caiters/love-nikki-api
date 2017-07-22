@@ -16,13 +16,13 @@ Vue.component("style-checkboxes", {
   props: ["styles", "currentStyles", "error"],
   data: function() {
     return {
-      //selectedStyles: this.currentStyles,
+      selectedStyles: this.currentStyles,
       componentValidated: false
     };
   },
-  computed: {
-    selectedStyles: function() {
-      return this.currentStyles;
+  watch: {
+    currentStyles: function(newStyles) {
+      this.selectedStyles = newStyles;
     }
   },
   created: function() {

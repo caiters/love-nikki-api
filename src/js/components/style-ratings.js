@@ -17,12 +17,12 @@ Vue.component("style-ratings", {
   props: ["styles", "currentRatings"],
   data: function() {
     return {
-      //styleRatings: this.currentRatings
+      styleRatings: this.currentRatings
     };
   },
-  computed: {
-    styleRatings: function() {
-      return this.currentRatings;
+  watch: {
+    currentRatings: function(newRatings) {
+      this.styleRatings = newRatings;
     }
   },
   created: function() {

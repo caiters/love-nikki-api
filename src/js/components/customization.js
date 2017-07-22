@@ -20,14 +20,17 @@ Vue.component("customization", {
   `,
   props: ["isCustomizable", "customizations"],
   data: function() {
-    return {};
+    return {
+      customizable: this.isCustomizable,
+      customizableItems: this.customizations
+    };
   },
-  computed: {
-    customizable: function() {
-      return this.isCustomizable;
+  watch: {
+    isCustomizable: function(customizable) {
+      this.customizable = customizable;
     },
-    customizableItems: function() {
-      return this.customizations;
+    customizations: function(newCustomizations) {
+      this.customizableItems = newCustomizations;
     }
   },
   created: function() {

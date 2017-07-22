@@ -10,12 +10,12 @@ Vue.component("tags", {
   props: ["tags", "currentTags"],
   data: function() {
     return {
-      //selectedTags: this.currentTags
+      selectedTags: this.currentTags
     };
   },
-  computed: {
-    selectedTags: function() {
-      return this.currentTags;
+  watch: {
+    currentTags: function(val) {
+      this.selectedTags = val;
     }
   },
   created: function() {
