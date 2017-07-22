@@ -1,7 +1,7 @@
 var clothingTable = Vue.component("clothing-table", {
   template: `
   <div class="clothing-table">
-    <category-select :categories="categories" @change="updateCategory"></category-select>
+    <category-select :categories="categories" :current-category="selectedCategory" @change="updateCategory"></category-select>
     <style-checkboxes :styles="orderedStyles" @change="updateStyleArray" :current-styles="selectedStyles"></style-checkboxes>
     <tags :tags="orderedTags" @change="updateTags" :current-tags="selectedTags"></tags>
     {{selectedTags}}
