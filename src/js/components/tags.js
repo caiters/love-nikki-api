@@ -10,12 +10,17 @@ Vue.component("tags", {
   props: ["tags", "currentTags"],
   data: function() {
     return {
-      selectedTags: this.currentTags
+      //selectedTags: this.currentTags
     };
+  },
+  computed: {
+    selectedTags: function() {
+      return this.currentTags;
+    }
   },
   created: function() {
     var form = this;
-    bus.$on("FormSubmitted", function() {
+    bus.$on("FormCleared", function() {
       form.selectedTags = [];
     });
   },

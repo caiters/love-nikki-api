@@ -16,9 +16,14 @@ Vue.component("style-checkboxes", {
   props: ["styles", "currentStyles", "error"],
   data: function() {
     return {
-      selectedStyles: this.currentStyles,
+      //selectedStyles: this.currentStyles,
       componentValidated: false
     };
+  },
+  computed: {
+    selectedStyles: function() {
+      return this.currentStyles;
+    }
   },
   created: function() {
     var form = this;
@@ -33,7 +38,7 @@ Vue.component("style-checkboxes", {
         }
       });
     });
-    bus.$on("FormSubmitted", function() {
+    bus.$on("FormCleared", function() {
       form.selectedStyles = [];
       form.componentValidated = false;
     });

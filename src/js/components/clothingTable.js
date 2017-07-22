@@ -77,7 +77,7 @@ var clothingTable = Vue.component("clothing-table", {
   },
   methods: {
     filterByCategory: function(clothes, category) {
-      if (category.length > 0) {
+      if (category && category.length > 0) {
         return _.pickBy(clothes, function(value) {
           return value.category === category;
         });

@@ -60,7 +60,7 @@ Vue.component("category-select", {
         }
       });
     });
-    bus.$on("FormSubmitted", function() {
+    bus.$on("FormCleared", function() {
       form.chosenCategory = "";
     });
   },

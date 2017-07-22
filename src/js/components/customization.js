@@ -18,11 +18,17 @@ Vue.component("customization", {
     </div>
   </fieldset>
   `,
+  props: ["isCustomizable", "customizations"],
   data: function() {
-    return {
-      customizable: false,
-      customizableItems: [{ id: "" }]
-    };
+    return {};
+  },
+  computed: {
+    customizable: function() {
+      return this.isCustomizable;
+    },
+    customizableItems: function() {
+      return this.customizations;
+    }
   },
   created: function() {
     var form = this;
@@ -39,7 +45,7 @@ Vue.component("customization", {
         });
       }.bind(this)
     );
-    bus.$on("FormSubmitted", function() {
+    bus.$on("FormCleared", function() {
       form.customizable = false;
       form.customizableItems = [{ id: "" }];
     });

@@ -1,6 +1,8 @@
 Vue.component("style-ratings", {
   template: `
   <fieldset>
+  {{styles}}
+  {{currentRatings}}
     <legend>Give ratings for selected styles</legend>
     <div v-if="styles.length < 5">
       <p>Select 5 styles above.</p>
@@ -15,8 +17,13 @@ Vue.component("style-ratings", {
   props: ["styles", "currentRatings"],
   data: function() {
     return {
-      styleRatings: this.currentRatings
+      //styleRatings: this.currentRatings
     };
+  },
+  computed: {
+    styleRatings: function() {
+      return this.currentRatings;
+    }
   },
   created: function() {
     var form = this;
@@ -30,7 +37,7 @@ Vue.component("style-ratings", {
         }
       });
     });
-    bus.$on("FormSubmitted", function() {
+    bus.$on("FormCleared", function() {
       form.styleRatings = {};
     });
   },
