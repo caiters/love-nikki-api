@@ -6,7 +6,8 @@ var clothingTable = Vue.component("clothing-table", {
     <category-select :categories="categories" :current-category="selectedCategory" @change="updateCategory"></category-select>
     <style-checkboxes :styles="orderedStyles" @change="updateStyleArray" :current-styles="selectedStyles"></style-checkboxes>
     <tags :tags="orderedTags" @change="updateTags" :current-tags="selectedTags"></tags>
-    {{selectedTags}}
+
+    <p>Showing {{clothesFilteredTotal}}/{{clothesTotal}} clothes</p>
     <table class="clothing-table__table">
       <thead>
         <tr>
@@ -71,6 +72,13 @@ var clothingTable = Vue.component("clothing-table", {
       clothes = this.filterByStyle(clothes, this.selectedStyles);
       clothes = this.filterByTags(clothes, this.selectedTags);
       return clothes;
+    },
+    clothesFilteredTotal: function() {
+      return Object.keys(this.clothes).length;
+    },
+    clothesTotal: function() {
+      var clothes = store.state.clothes;
+      return Object.keys(clothes).length;
     },
     categories: function() {
       return store.state.categories;
