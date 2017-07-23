@@ -45,20 +45,27 @@ var formBody = Vue.component("form-body", {
   props: ["clothing"],
   data: function() {
     return {
-      finished: false,
-      clothingFormData: _.cloneDeep(this.clothing),
-      componentsToValidate: 0,
-      componentsOK: 0,
-      componentsErrored: 0,
-      isExistingItem: false,
-      existingItem: {}
+      clothingFormData: _.cloneDeep(this.clothing)
     };
   },
-  mounted: function() {
-    bus.$emit("componentValidateable", "main form");
-  },
   created: function() {
+    var form = this;
     store.dispatch("load");
+    bus.$emit("componentValidateable", "form body");
+    bus.$on("validateForm", function() {
+      form.$validator.validateAll().then(function(result) {
+        if (result) {
+          bus.$emit("componentOK");
+        } else {
+          bus.$emit("componentError", form.$validator.errorBag.errors);
+        }
+      });
+    });
+    bus.$on("FormCleared", function() {
+      console.log(form.clothing);
+      // resets back to empty
+      form.clothingFormData = _.cloneDeep(form.clothing);
+    });
   },
   computed: {
     orderedStyles: function() {

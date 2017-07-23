@@ -23,7 +23,22 @@ var formTop = Vue.component("form-top", {
     };
   },
   created: function() {
+    var form = this;
     bus.$emit("componentValidateable", "formTop");
+    bus.$on("validateForm", function() {
+      form.$validator.validateAll().then(function(result) {
+        if (result) {
+          bus.$emit("componentOK");
+        } else {
+          bus.$emit("componentError", form.$validator.errorBag.errors);
+        }
+      });
+    });
+    bus.$on("FormCleared", function() {
+      form.clothingID = "";
+      form.category = "";
+      form.existingItem = {};
+    });
   },
   computed: {
     categories: function() {

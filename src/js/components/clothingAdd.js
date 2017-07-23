@@ -3,7 +3,7 @@ var clothingAdd = Vue.component("clothing-form", {
   template: `<form id="submitNewClothing" class="clothing-form" @submit.prevent="validateBeforeSubmit" novalidate="novalidate">
   <h1 class="clothing-form__heading">Add New Clothing</h1>
   <form-top @change="updateCategory" @changeFormTop="updateClothingUnique"></form-top>
-  <form-body :clothing="clothingFormDataBody" @changeFormBody="updateClothingBody"></form-body>
+  <form-body :clothing="clothingFormDataBodyFeed" @changeFormBody="updateClothingBody"></form-body>
   {{combinedObject}}
   <button type="submit">Submit Clothing</button>
 </form>`,
@@ -16,6 +16,15 @@ var clothingAdd = Vue.component("clothing-form", {
         category: ""
       },
       clothingFormDataBody: {
+        name: "",
+        hearts: null,
+        clothingStyles: [],
+        ratings: {},
+        tags: [],
+        customizable: false,
+        customizableItems: []
+      },
+      clothingFormDataBodyFeed: {
         name: "",
         hearts: null,
         clothingStyles: [],
@@ -45,6 +54,8 @@ var clothingAdd = Vue.component("clothing-form", {
 
     bus.$on("componentOK", function() {
       form.componentsOK++;
+      console.log(form.componentsOK, "OK");
+      console.log(form.componentsToValidate, "to validate");
       if (form.componentsToValidate === form.componentsOK) {
         form.submitForm();
       }
