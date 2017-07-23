@@ -48,6 +48,9 @@ Vue.component("style-checkboxes", {
       this.$emit("change", styles);
     },
     shouldBeDisabled: function(value) {
+      if (typeof this.selectedStyles === "undefined") {
+        return false;
+      }
       if (this.selectedStyles.indexOf(value) > -1) {
         return false;
       }

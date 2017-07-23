@@ -1,6 +1,7 @@
 var routes = [
   { path: "/", component: clothingTable },
-  { path: "/add-clothing", component: clothingForm }
+  { path: "/add-clothing", component: clothingAdd },
+  { path: "/:id/:category/edit/", component: clothingEdit, props: true }
 ];
 
 var router = new VueRouter({
