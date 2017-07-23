@@ -16,6 +16,7 @@ var clothingTable = Vue.component("clothing-table", {
           <th>Tags</th>
           <th>Customizable?</th>
           <th>Customizes to...</th>
+          <th>Edit?</th>
           <th>Delete?</th>
         </tr>
       </thead>
@@ -42,7 +43,7 @@ var clothingTable = Vue.component("clothing-table", {
           <td valign="top">{{clothing.customizable}}</td>
           <td valign="top"><span v-for="(customization, index) in clothing.customizations">{{customization}}, </span></td>
           <td valign="top">
-            <button type="button" @click="editClothing(clothing.category, clothing.id)">Edit</button>
+            <router-link :to="'/' + clothing.id + '/' + clothing.category + '/edit'">Edit</router-link>
           </td>
           <td valign="top">
             <button type="button" @click="deleteClothing(clothing.category, clothing.id)">Delete</button>

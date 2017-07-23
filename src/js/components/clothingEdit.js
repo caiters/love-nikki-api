@@ -1,10 +1,7 @@
 var clothingEdit = Vue.component("clothing-edit", {
   template: `<form id="submitNewClothing" class="clothing-form" @submit.prevent="validateBeforeSubmit" novalidate="novalidate">
-  <h1 class="clothing-form__heading">Add New Clothing</h1>
-  <form-top @change="updateCategory"></form-top>
-  <form-body clothing="clothingFormData"></form-body>
-
-
+  <h1 class="clothing-form__heading">Edit Clothing</h1>
+  <form-body :clothing="clothingFormData"></form-body>
 </form>`,
   props: ["id", "category"],
   data: function() {
@@ -22,8 +19,7 @@ var clothingEdit = Vue.component("clothing-edit", {
       componentsToValidate: 0,
       componentsOK: 0,
       componentsErrored: 0,
-      isExistingItem: false,
-      existingItem: {}
+      isExistingItem: false
     };
   },
   mounted: function() {
@@ -39,11 +35,28 @@ var clothingEdit = Vue.component("clothing-edit", {
           form.clothingFormData.id = form.id;
           form.clothingFormData.category = form.category;
           var item = store.state.clothes[form.id + "-" + form.category];
+          var itemsArray = [];
+          _.forEach(item.customizations, function(item) {
+            var itemObj = {
+              id: item
+            };
+            itemsArray.push(itemObj);
+          });
           if (item) {
             form.isExistingItem = true;
-            form.existingItem = item;
+            form.clothingFormData = item;
+            form.clothingFormData = {
+              id: item.id,
+              category: item.category,
+              name: item.name,
+              hearts: item.hearts,
+              clothingStyles: Object.keys(item.style),
+              ratings: item.style,
+              tags: item.tags,
+              customizable: item.customizable,
+              customizableItems: itemsArray
+            };
           }
-          form.editExisting();
         }
       }
     });
@@ -126,28 +139,17 @@ var clothingEdit = Vue.component("clothing-edit", {
         var item = store.state.clothes[id + "-" + category];
         if (item) {
           this.isExistingItem = true;
-          this.existingItem = item;
+          this.clothingFormData = item;
         } else {
-          this.isExistingItem = false;
-          this.existingItem = {};
+          //this.isExistingItem = false;
+          //this.existingItem = {};
         }
       } else {
-        this.isExistingItem = false;
-        this.existingItem = {};
+        //this.isExistingItem = false;
+        //this.existingItem = {};
       }
     },
     editExisting: function() {
-      var itemsArray = [];
-      console.log("before");
-      _.forEach(this.existingItem.customizations, function(item) {
-        console.log(item);
-        var itemObj = {
-          id: item
-        };
-        itemsArray.push(itemObj);
-      });
-      console.log("after");
-      console.log(itemsArray);
       this.clothingFormData = {
         id: this.existingItem.id,
         category: this.existingItem.category,

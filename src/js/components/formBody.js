@@ -91,6 +91,11 @@ var formBody = Vue.component("form-body", {
       };
     }
   },
+  watch: {
+    clothing: function(newData) {
+      this.clothingFormData = newData;
+    }
+  },
   methods: {
     change: function() {
       this.$emit("changeFormBody", this.clothingFormData);
