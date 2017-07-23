@@ -1,6 +1,8 @@
 var clothingTable = Vue.component("clothing-table", {
   template: `
   <div class="clothing-table">
+    <label for="filterID">Filter by ID:</label>
+    <input id="filterID" name="filterID" v-model="filterID" type="text" />
     <category-select :categories="categories" :current-category="selectedCategory" @change="updateCategory"></category-select>
     <style-checkboxes :styles="orderedStyles" @change="updateStyleArray" :current-styles="selectedStyles"></style-checkboxes>
     <tags :tags="orderedTags" @change="updateTags" :current-tags="selectedTags"></tags>
@@ -56,7 +58,8 @@ var clothingTable = Vue.component("clothing-table", {
     return {
       selectedCategory: "",
       selectedStyles: [],
-      selectedTags: []
+      selectedTags: [],
+      filterID: ""
     };
   },
   computed: {
@@ -64,6 +67,7 @@ var clothingTable = Vue.component("clothing-table", {
       console.log("refreshing clothing");
       var clothes = store.state.clothes;
       clothes = this.filterByCategory(clothes, this.selectedCategory);
+      clothes = this.filterByID(clothes, this.filterID);
       clothes = this.filterByStyle(clothes, this.selectedStyles);
       clothes = this.filterByTags(clothes, this.selectedTags);
       return clothes;
@@ -84,6 +88,14 @@ var clothingTable = Vue.component("clothing-table", {
       if (category && category.length > 0) {
         return _.pickBy(clothes, function(value) {
           return value.category === category;
+        });
+      }
+      return clothes;
+    },
+    filterByID: function(clothes, filterID) {
+      if (filterID && filterID.length === 3) {
+        return _.pickBy(clothes, function(value) {
+          return value.id === filterID;
         });
       }
       return clothes;
