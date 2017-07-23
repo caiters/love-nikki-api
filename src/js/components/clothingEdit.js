@@ -2,6 +2,7 @@ var clothingEdit = Vue.component("clothing-edit", {
   template: `<form id="submitNewClothing" class="clothing-form" @submit.prevent="validateBeforeSubmit" novalidate="novalidate">
   <h1 class="clothing-form__heading">Edit Clothing</h1>
   <form-body :clothing="clothingFormData"></form-body>
+  <button type="submit">Submit Clothing</button>
 </form>`,
   props: ["id", "category"],
   data: function() {
