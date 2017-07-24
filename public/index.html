@@ -6,13 +6,14 @@
   </head>
   <body>
     <div id="nikki">
-      <nav>
-        <ul>
-          <li><router-link to="/">View Clothing</router-link></li>
-          <li><router-link to="/add-clothing">Add new clothing</router-link></li>
+      <nav class="main-nav">
+        <h1 class="site-title">Love Nikki Clothing Database</h1>
+        <ul class="main-nav__list">
+          <li class="main-nav__item"><router-link class="main-nav__link" to="/">View</router-link></li>
+          <li class="main-nav__item"><router-link class="main-nav__link" to="/add-clothing">Add new clothing</router-link></li>
         </ul>
       </nav>
-      <main>
+      <main class="page-body">
         <router-view></router-view>
       </main>
     </div>

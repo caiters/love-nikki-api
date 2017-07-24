@@ -1,54 +1,56 @@
 var clothingTable = Vue.component("clothing-table", {
   template: `
-  <div class="clothing-table">
-    <label for="filterID">Filter by ID:</label>
-    <input id="filterID" name="filterID" v-model="filterID" type="text" />
+  <div class="clothing-view">
+    <div class="form-group">
+      <label class="form-group__label" for="filterID">Filter by ID:</label>
+      <input class="form-group__input" id="filterID" name="filterID" v-model="filterID" type="text" />
+    </div>
     <category-select :categories="categories" :current-category="selectedCategory" @change="updateCategory"></category-select>
     <style-checkboxes :styles="orderedStyles" @change="updateStyleArray" :current-styles="selectedStyles"></style-checkboxes>
     <tags :tags="orderedTags" @change="updateTags" :current-tags="selectedTags"></tags>
 
     <p>Showing {{clothesFilteredTotal}}/{{clothesTotal}} clothes</p>
-    <table class="clothing-table__table">
-      <thead>
-        <tr>
-          <th>Category</th>
-          <th>ID</th>
-          <th>Clothing Name</th>
-          <th>Hearts</th>
-          <th>Styles</th>
-          <th>Tags</th>
-          <th>Customizable?</th>
-          <th>Customizes to...</th>
-          <th>Edit?</th>
-          <th>Delete?</th>
+    <table class="clothing-table">
+      <thead class="clothing-table__head">
+        <tr class="clothing-table__row clothing-table__row--head">
+          <th class="clothing-table__cell clothing-table__header">Category</th>
+          <th class="clothing-table__cell clothing-table__header">ID</th>
+          <th class="clothing-table__cell clothing-table__header">Clothing Name</th>
+          <th class="clothing-table__cell clothing-table__header">Hearts</th>
+          <th class="clothing-table__cell clothing-table__header">Styles</th>
+          <th class="clothing-table__cell clothing-table__header">Tags</th>
+          <!--<th class="clothing-table__cell clothing-table__header">Customizable?</th>-->
+          <th class="clothing-table__cell clothing-table__header">Customizes to...</th>
+          <th class="clothing-table__cell clothing-table__header">Edit?</th>
+          <th class="clothing-table__cell clothing-table__header">Delete?</th>
         </tr>
       </thead>
-      <tbody>
-        <tr v-for="clothing in clothes" :id="clothing.category + '-' + clothing.id">
-          <td valign="top">{{clothing.category}}</td>
-          <td valign="top">{{clothing.id}}</td>
-          <td valign="top">{{clothing.name}}</td>
-          <td valign="top"><span v-for="heart in clothing.hearts">&hearts;</span></td>
-          <td valign="top">
+      <tbody class="clothing-table__body">
+        <tr v-for="clothing in clothes" :id="clothing.category + '-' + clothing.id" class="clothing-table__row" :key="clothing.category + '-' + clothing.id">
+          <td class="clothing-table__cell" valign="top">{{clothing.category}}</td>
+          <td class="clothing-table__cell" valign="top">{{clothing.id}}</td>
+          <td class="clothing-table__cell" valign="top">{{clothing.name}}</td>
+          <td class="clothing-table__cell" valign="top"><span v-for="heart in clothing.hearts">&hearts;</span></td>
+          <td class="clothing-table__cell" valign="top">
             <ul class="clothing-table__style-list style-list">
               <li v-for="(style, index) in clothing.style" :class="'style-list__item style ' + 'style--' + index.toLowerCase()">
                 {{index}}: {{style.toUpperCase()}}
               </li>
             </ul>
           </td>
-          <td valign="top">
+          <td class="clothing-table__cell" valign="top">
             <ul class="tags-list">
               <li class="tags-list__item tag" v-for="(tag, index) in clothing.tags">
                 {{tag}}
               </li>
             </ul>
           </td>
-          <td valign="top">{{clothing.customizable}}</td>
-          <td valign="top"><span v-for="(customization, index) in clothing.customizations">{{customization}}, </span></td>
-          <td valign="top">
+          <!--<td class="clothing-table__cell" valign="top">{{clothing.customizable}}</td>-->
+          <td class="clothing-table__cell" valign="top"><span v-for="(customization, index) in clothing.customizations">{{customization}}, </span></td>
+          <td class="clothing-table__cell" valign="top">
             <router-link :to="'/' + clothing.id + '/' + clothing.category + '/edit'">Edit</router-link>
           </td>
-          <td valign="top">
+          <td class="clothing-table__cell" valign="top">
             <button type="button" @click="deleteClothing(clothing.category, clothing.id)">Delete</button>
           </td>
         </tr>
@@ -65,13 +67,13 @@ var clothingTable = Vue.component("clothing-table", {
   },
   computed: {
     clothes: function() {
-      console.log("refreshing clothing");
       var clothes = store.state.clothes;
       clothes = this.filterByCategory(clothes, this.selectedCategory);
       clothes = this.filterByID(clothes, this.filterID);
       clothes = this.filterByStyle(clothes, this.selectedStyles);
       clothes = this.filterByTags(clothes, this.selectedTags);
-      return clothes;
+      var clothesArray = _.sortBy(clothes, ["category", "id"]);
+      return clothesArray;
     },
     clothesFilteredTotal: function() {
       return Object.keys(this.clothes).length;
