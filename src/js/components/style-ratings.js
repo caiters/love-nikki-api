@@ -1,8 +1,6 @@
 Vue.component("style-ratings", {
   template: `
   <fieldset>
-  {{styles}}
-  {{currentRatings}}
     <legend>Give ratings for selected styles</legend>
     <div v-if="styles.length < 5">
       <p>Select 5 styles above.</p>

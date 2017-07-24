@@ -4,7 +4,6 @@ var clothingAdd = Vue.component("clothing-form", {
   <h1 class="clothing-form__heading">Add New Clothing</h1>
   <form-top @change="updateCategory" @changeFormTop="updateClothingUnique"></form-top>
   <form-body :clothing="clothingFormDataBodyFeed" @changeFormBody="updateClothingBody"></form-body>
-  {{combinedObject}}
   <button type="submit">Submit Clothing</button>
 </form>`,
   props: ["id", "category"],
@@ -25,6 +24,7 @@ var clothingAdd = Vue.component("clothing-form", {
         customizableItems: []
       },
       clothingFormDataBodyFeed: {
+        // this will always be empty
         name: "",
         hearts: null,
         clothingStyles: [],
@@ -45,7 +45,6 @@ var clothingAdd = Vue.component("clothing-form", {
   },
   created: function() {
     var form = this;
-
     store.dispatch("load");
 
     bus.$on("componentValidateable", function(name) {
@@ -118,48 +117,6 @@ var clothingAdd = Vue.component("clothing-form", {
     updateCategory: function(category) {
       this.clothingFormDataTop.category = category;
     },
-    checkExisting: function(id, category) {
-      console.log(id);
-      console.log(category);
-      console.log("checking");
-      if (category.length > 0 && id.length === 3) {
-        var item = store.state.clothes[id + "-" + category];
-        if (item) {
-          this.isExistingItem = true;
-          this.existingItem = item;
-        } else {
-          this.isExistingItem = false;
-          this.existingItem = {};
-        }
-      } else {
-        this.isExistingItem = false;
-        this.existingItem = {};
-      }
-    },
-    editExisting: function() {
-      var itemsArray = [];
-      console.log("before");
-      _.forEach(this.existingItem.customizations, function(item) {
-        console.log(item);
-        var itemObj = {
-          id: item
-        };
-        itemsArray.push(itemObj);
-      });
-      console.log("after");
-      console.log(itemsArray);
-      this.clothingFormData = {
-        id: this.existingItem.id,
-        category: this.existingItem.category,
-        name: this.existingItem.name,
-        hearts: this.existingItem.hearts,
-        clothingStyles: Object.keys(this.existingItem.style),
-        ratings: this.existingItem.style,
-        tags: this.existingItem.tags,
-        customizable: this.existingItem.customizable,
-        customizableItems: itemsArray
-      };
-    },
     clearForm: function(e) {
       var emptyData = {
         id: "",
@@ -193,15 +150,12 @@ var clothingAdd = Vue.component("clothing-form", {
           bus.$emit("componentError", form.$validator.errorBag.errors);
         }
       });
-      console.log("validated");
     },
     submitClothing: function(e) {
-      console.log("submitting clothes");
       store.dispatch("addClothingItem", this.reformatObject);
       this.clearForm();
     },
     submitForm: function() {
-      console.log("submitting form");
       return this.submitClothing();
     }
   }
