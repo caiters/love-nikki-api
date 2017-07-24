@@ -102,8 +102,11 @@ var clothingTable = Vue.component("clothing-table", {
       // check styles
       if (form.selectedStyles.length > 0) {
         var keys = Object.keys(clothing.style);
-        _.pullAll(keys, form.selectedStyles);
-        if (!(keys.length <= 5 - form.selectedStyles.length)) {
+        console.log(_.intersection(form.selectedStyles, keys).length);
+        if (
+          _.intersection(form.selectedStyles, keys).length !==
+          form.selectedStyles.length
+        ) {
           return false;
         }
       }
