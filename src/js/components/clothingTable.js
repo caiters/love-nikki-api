@@ -71,8 +71,14 @@ var clothingTable = Vue.component("clothing-table", {
       return _.sortBy(clothes, ["category", "id"]);
     },
     clothesFilteredTotal: function() {
-      // this won't work anymore and needs to be the number of visible items
-      return Object.keys(this.clothes).length;
+      var form = this;
+      return _.reduce(
+        form.clothes,
+        function(currentTotal, clothingItem) {
+          return currentTotal + (form.shouldShow(clothingItem) ? 1 : 0);
+        },
+        0
+      );
     },
     clothesTotal: function() {
       var clothes = store.state.clothes;
