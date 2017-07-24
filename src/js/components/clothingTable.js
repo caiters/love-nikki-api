@@ -26,7 +26,7 @@ var clothingTable = Vue.component("clothing-table", {
         </tr>
       </thead>
       <tbody class="clothing-table__body">
-        <tr v-for="clothing in clothes" :id="clothing.category + '-' + clothing.id" class="clothing-table__row" :key="clothing.category + '-' + clothing.id">
+        <tr v-for="clothing in clothes" :id="clothing.category + '-' + clothing.id" class="clothing-table__row" :key="clothing.category + '-' + clothing.id" v-show="shouldShow(clothing)">
           <td class="clothing-table__cell" valign="top">{{clothing.category}}</td>
           <td class="clothing-table__cell" valign="top">{{clothing.id}}</td>
           <td class="clothing-table__cell" valign="top">{{clothing.name}}</td>
@@ -67,6 +67,7 @@ var clothingTable = Vue.component("clothing-table", {
   },
   computed: {
     clothes: function() {
+      console.log("clothes is filtering");
       var clothes = store.state.clothes;
       clothes = this.filterByCategory(clothes, this.selectedCategory);
       clothes = this.filterByID(clothes, this.filterID);
@@ -76,6 +77,7 @@ var clothingTable = Vue.component("clothing-table", {
       return clothesArray;
     },
     clothesFilteredTotal: function() {
+      // this won't work anymore and needs to be the number of visible items
       return Object.keys(this.clothes).length;
     },
     clothesTotal: function() {
@@ -97,7 +99,12 @@ var clothingTable = Vue.component("clothing-table", {
     filterByCategory: function(clothes, category) {
       if (category && category.length > 0) {
         return _.pickBy(clothes, function(value) {
-          return value.category === category;
+          if (value.category === category) {
+            value.show = true;
+          } else {
+            value.show = false;
+          }
+          return value.category;
         });
       }
       return clothes;
@@ -105,7 +112,12 @@ var clothingTable = Vue.component("clothing-table", {
     filterByID: function(clothes, filterID) {
       if (filterID && filterID.length === 3) {
         return _.pickBy(clothes, function(value) {
-          return value.id === filterID;
+          if (value.id === filterID) {
+            value.show = true;
+          } else {
+            value.show = false;
+          }
+          return value.id;
         });
       }
       return clothes;
@@ -116,8 +128,11 @@ var clothingTable = Vue.component("clothing-table", {
           var keys = Object.keys(item.style);
           _.pullAll(keys, styleArray);
           if (keys.length <= 5 - styleArray.length) {
-            return item;
+            item.show = true;
+          } else {
+            item.show = false;
           }
+          return item;
         });
       }
       return clothes;
@@ -130,22 +145,59 @@ var clothingTable = Vue.component("clothing-table", {
             var numTags = currentTags.length;
             _.pullAll(currentTags, item.tags);
             if (currentTags.length < numTags) {
-              return item;
+              item.show = true;
+            } else {
+              item.show = false;
             }
+            return item;
           }
         });
         return clothes;
       }
       return clothes;
     },
+    shouldShow: function(clothing) {
+      /*
+      selectedCategory: "",
+      selectedStyles: [],
+      selectedTags: [],
+      filterID: ""
+      */
+      var form = this;
+
+      // check styles
+      if (form.selectedStyles.length > 0) {
+        var keys = Object.keys(clothing.style);
+        _.pullAll(keys, form.selectedStyles);
+        if (!(keys.length <= 5 - form.selectedStyles.length)) {
+          return false;
+        }
+      }
+      if (form.selectedTags.length > 0) {
+        var currentTags = form.selectedTags.slice();
+        var numTags = currentTags.length;
+        _.pullAll(currentTags, form.selectedTags);
+        if (!(currentTags.length < numTags)) {
+          return false;
+        }
+      }
+      if (form.selectedCategory.length > 0) {
+        if (clothing.category !== form.selectedCategory) {
+          return false;
+        }
+      }
+      if (form.filterID.length > 2) {
+        if (clothing.id !== form.filterID) {
+          return false;
+        }
+      }
+      return true;
+    },
     updateCategory: function(chosenCategory) {
       this.selectedCategory = chosenCategory;
     },
     updateStyleArray: function(chosenStyles) {
       this.selectedStyles = chosenStyles;
-    },
-    editClothing: function(category, id) {
-      //asdf
     },
     deleteClothing: function(category, id) {
       store.dispatch("deleteClothingItem", { category: category, id: id });
