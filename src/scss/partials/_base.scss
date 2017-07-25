@@ -24,7 +24,7 @@ body { padding-top: 80px; }
   td { padding: 0.5rem; }
 }
 
-.style { padding: 2px; border-radius: 2px;
+.style { padding: 2px 4px; border-radius: 2px; border: 2px solid #fff; 
   &--gorgeous { background-color: $gorgeous; }
   &--simple { background-color: $simple; }
   &--elegance { background-color: $elegance; }

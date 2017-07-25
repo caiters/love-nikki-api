@@ -1,3 +1,26 @@
-.clothing-table { width: 100%;
+.clothing-table { width: 100%; border-spacing: 0;
   &__header { text-align: left; }
+  &__row {
+    &:nth-child(even) { background: #fff; }
+    &:nth-child(odd) { background: #efefef; }
+    &--head {
+      &:nth-child(odd) { background: #fff; }
+    }
+    &:hover { background: #e0e0e0; }
+  }
+}
+
+.select-tags { display: grid; grid-template-columns: 50% 50%;
+  @media (min-width: 600px) {
+    grid-template-columns: 33.3333% 33.3333% 33.3333%;
+  }
+  @media (min-width: 768px) {
+    grid-template-columns: 25% 25% 25% 25%;
+  }
+  @media (min-width: 992px) {
+    grid-template-columns: 20% 20% 20% 20% 20%;
+  }
+  @media (min-width: 1200px) {
+    grid-template-columns: 16.66666666% 16.66666666% 16.66666666% 16.66666666% 16.66666666% 16.66666666%;
+  }
 }
