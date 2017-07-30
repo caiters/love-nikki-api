@@ -5,9 +5,11 @@ Vue.component("style-checkboxes", {
     <p class="form-group__error" v-if="(!errors.has('selectedStylesNum') && (fields.selectedStylesNum && !fields.selectedStylesNum.valid)) || !componentValidated">Please select 5 styles.</p>
     <p class="form-group__error" style="color:red" v-if="errors.has('selectedStylesNum') && componentValidated">{{errors.first('selectedStylesNum')}}</p>
     <p class="form-group__message" v-if="fields.selectedStylesNum && fields.selectedStylesNum.valid">5 styles selected.</p>
-    <div v-for="style in styles" class="style-form__checkbox-container">
-      <input :disabled="shouldBeDisabled(style)" @change="checkedItem(selectedStyles)" v-model="selectedStyles" type="checkbox" :value="style" :name="style" :id="'selectStyles' + style" />
-      <label v-bind:for="'selectStyles' + style" v-bind:class="'style style--' + style.toLowerCase()">{{style}}</label>
+    <div class="style-form__checkbox-list">
+      <div v-for="(style, index) in sortedStyles" class="style-column" :class="{ 'style-column--even': index%2 === 0 }">
+        <input :disabled="shouldBeDisabled(style)" @change="checkedItem(selectedStyles)" v-model="selectedStyles" type="checkbox" :value="style" :name="style" :id="'selectStyles' + style" />
+        <label v-bind:for="'selectStyles' + style" v-bind:class="'style style--' + style.toLowerCase()">{{style}}</label>
+      </div>
     </div>
     <input v-model="selectedStyles.length" name="selectedStylesNum" type="hidden" id="selectedStylesNum" v-validate="'required|min_value:5|max_value:5'" min="5" max="5" required disabled />
 
@@ -23,6 +25,27 @@ Vue.component("style-checkboxes", {
   watch: {
     currentStyles: function(newStyles) {
       this.selectedStyles = newStyles;
+    }
+  },
+  computed: {
+    sortedStyles: function() {
+      var order = [
+        "Simple",
+        "Gorgeous",
+        "Pure",
+        "Sexy",
+        "Lively",
+        "Elegance",
+        "Cool",
+        "Warm",
+        "Cute",
+        "Mature"
+      ];
+      var sortedStyles = this.styles;
+      sortedStyles = _.sortBy(sortedStyles, function(item) {
+        return _.indexOf(order, item);
+      });
+      return sortedStyles;
     }
   },
   created: function() {

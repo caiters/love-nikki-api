@@ -18,3 +18,12 @@
   &__heart-input { opacity: 0; height: 1px; width: 1px; margin: 0; padding: 0; position: absolute; }
   &--error { color: red; }
 }
+
+.style-form {
+  &__checkbox-list { display: grid; grid-template-columns: 50%; max-width: 220px; }
+}
+.style-column { grid-column-start: 2; padding: 0.25em;
+  &--even { grid-column-start: 1; text-align: right;
+    input { float: right; }
+  }
+}

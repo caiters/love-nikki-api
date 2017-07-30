@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "dev": "DATABASE_URL=postgres://postgres:1234@localhost/nikki nodemon index.js",
+    "dev": "cross-env DATABASE_URL=postgres://postgres:1234@localhost/nikki nodemon index.js",
     "build": "gulp",
     "postinstall": "gulp build"
   },
