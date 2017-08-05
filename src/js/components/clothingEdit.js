@@ -32,7 +32,10 @@ var clothingEdit = Vue.component("clothing-edit", {
     var paramCat = this.category;
     store.dispatch("load").then(function() {
       if (form.id && form.category) {
-        if (form.id.length === 3 && form.category.length > 0) {
+        if (
+          (form.id.length === 3 || form.id.length === 4) &&
+          form.category.length > 0
+        ) {
           form.clothingFormData.id = form.id;
           form.clothingFormData.category = form.category;
           var item = store.state.clothes[form.id + "-" + form.category];
